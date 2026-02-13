@@ -2095,13 +2095,15 @@ export class ManifestStatsServer {
   }
 
   /**
-   * Load state from database
+   * Load state from database.
+   * Loads the freshest checkpoint data for each market across all checkpoints,
+   * which handles cases where some checkpoints may be incomplete.
    */
   async loadState(): Promise<boolean> {
     console.log('Loading state from database...');
 
     try {
-      // Get the most recent checkpoint
+      // Get the most recent checkpoint for lastFillSlot
       const checkpointResultRecent: QueryResult =
         await this.executeQueryWithMetrics(
           'SELECT_RECENT_CHECKPOINT',
@@ -2109,20 +2111,23 @@ export class ManifestStatsServer {
         );
 
       if (checkpointResultRecent.rowCount === 0) {
-        console.log('No saved lastFillSlot found in database');
+        console.log('No saved checkpoint found in database');
         return false;
       }
 
-      const checkpointId: number = checkpointResultRecent.rows[0].id;
       this.lastFillSlot = checkpointResultRecent.rows[0].last_fill_slot;
+      console.log(`Loaded lastFillSlot: ${this.lastFillSlot}`);
 
-      // Load market checkpoints
+      // Load the freshest checkpoint data for each market across ALL checkpoints
+      // This handles cases where a checkpoint was partially saved or interrupted
       const marketCheckpointsResult: QueryResult =
         await this.executeQueryWithMetrics(
-          'SELECT_MARKET_CHECKPOINTS',
+          'SELECT_FRESHEST_MARKET_CHECKPOINTS',
           async () =>
-            this.pool.query(queries.SELECT_MARKET_CHECKPOINTS, [checkpointId]),
+            this.pool.query(queries.SELECT_FRESHEST_MARKET_CHECKPOINTS),
         );
+
+      const checkpointIdsUsed: Set<number> = new Set();
 
       for (const row of marketCheckpointsResult.rows) {
         const market: string = row.market;
@@ -2140,10 +2145,11 @@ export class ManifestStatsServer {
         if (row.last_price) {
           this.lastPriceByMarket.set(market, Number(row.last_price));
         }
+        checkpointIdsUsed.add(row.checkpoint_id);
       }
 
       console.log(
-        `Loaded ${marketCheckpointsResult.rowCount} market checkpoints from database`,
+        `Loaded ${marketCheckpointsResult.rowCount} market checkpoints from database (from checkpoint IDs: ${Array.from(checkpointIdsUsed).join(', ')})`,
       );
 
       console.log('State loaded successfully from database');

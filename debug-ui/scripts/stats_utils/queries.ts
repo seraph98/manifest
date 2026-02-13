@@ -28,11 +28,32 @@ export const INSERT_TRADER_POSITION =
 
 export const SELECT_ALT_MARKETS = 'SELECT alt, market FROM alt_markets';
 
-export const SELECT_RECENT_CHECKPOINT =
-  'SELECT id, last_fill_slot FROM state_checkpoints ORDER BY created_at DESC LIMIT 1';
+// Select the most recent checkpoint that actually has market data
+// This handles cases where a checkpoint was created but market data save failed/was interrupted
+export const SELECT_RECENT_CHECKPOINT = `
+  SELECT sc.id, sc.last_fill_slot
+  FROM state_checkpoints sc
+  WHERE EXISTS (SELECT 1 FROM market_checkpoints mc WHERE mc.checkpoint_id = sc.id)
+  ORDER BY sc.created_at DESC
+  LIMIT 1
+`;
 
 export const SELECT_MARKET_CHECKPOINTS =
   'SELECT market, base_volume_checkpoints, quote_volume_checkpoints, checkpoint_timestamps, last_price FROM market_checkpoints WHERE checkpoint_id = $1';
+
+// Select the freshest checkpoint data for each market across ALL checkpoints
+// Uses DISTINCT ON to get only the row with the highest checkpoint_id per market
+export const SELECT_FRESHEST_MARKET_CHECKPOINTS = `
+  SELECT DISTINCT ON (market)
+    market,
+    base_volume_checkpoints,
+    quote_volume_checkpoints,
+    checkpoint_timestamps,
+    last_price,
+    checkpoint_id
+  FROM market_checkpoints
+  ORDER BY market, checkpoint_id DESC
+`;
 
 export const SELECT_FILLS_COMPLETE_COUNT_BASE =
   'SELECT COUNT(*) as total FROM fills_complete';
