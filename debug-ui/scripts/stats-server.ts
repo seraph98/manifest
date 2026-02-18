@@ -278,6 +278,7 @@ const run = async () => {
   const app = express();
   app.use(cors());
 
+  /*
   // HTTP request metrics middleware - tracks latency and status codes per endpoint
   const httpMetrics = promBundle({
     includeMethod: true,
@@ -298,6 +299,7 @@ const run = async () => {
     ],
   });
   app.use(httpMetrics);
+  */
 
   // Global timeout middleware - 30 second timeout for all requests
   app.use((req, res, next) => {
