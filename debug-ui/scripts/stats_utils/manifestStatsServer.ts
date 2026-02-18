@@ -605,7 +605,7 @@ export class ManifestStatsServer {
     try {
       // Wrapper discriminant is 1 as u64 little-endian: [1, 0, 0, 0, 0, 0, 0, 0]
       const wrapperDiscriminant = Buffer.alloc(8);
-      wrapperDiscriminant.writeBigUInt64LE(1n);
+      wrapperDiscriminant.writeBigUInt64LE(BigInt(1));
 
       const wrapperAccounts = await this.connection.getProgramAccounts(
         WRAPPER_PROGRAM_ID,
