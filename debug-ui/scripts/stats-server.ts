@@ -278,16 +278,15 @@ const run = async () => {
   const app = express();
   app.use(cors());
 
-  /*
   // HTTP request metrics middleware - tracks latency and status codes per endpoint
+  // Use a separate registry to avoid metric name collisions with the metricsApp promBundle
+  const httpApiRegistry = new promClient.Registry();
   const httpMetrics = promBundle({
     includeMethod: true,
     includePath: true,
     includeStatusCode: true,
+    promRegistry: httpApiRegistry,
     metricsPath: '/metrics', // Expose on main app too for convenience
-    promClient: {
-      collectDefaultMetrics: {},
-    },
     normalizePath: [
       // Normalize paths with query params to avoid cardinality explosion
       ['^/orderbook.*', '/orderbook'],
@@ -299,7 +298,6 @@ const run = async () => {
     ],
   });
   app.use(httpMetrics);
-  */
 
   // Global timeout middleware - 30 second timeout for all requests
   app.use((req, res, next) => {

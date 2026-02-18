@@ -597,16 +597,29 @@ export class ManifestStatsServer {
   /**
    * Load all wrapper accounts and build the owner -> wrapper cache.
    * Wrapper account layout:
-   *   - Bytes 0-7: Discriminant (8 bytes)
+   *   - Bytes 0-7: Discriminant (8 bytes, value = 1 as u64 LE)
    *   - Bytes 8-39: Trader/owner pubkey (32 bytes)
    */
   private async loadWrapperCache(): Promise<void> {
     console.log('Loading wrapper accounts...');
     try {
+      // Wrapper discriminant is 1 as u64 little-endian: [1, 0, 0, 0, 0, 0, 0, 0]
+      const wrapperDiscriminant = Buffer.alloc(8);
+      wrapperDiscriminant.writeBigUInt64LE(1n);
+
       const wrapperAccounts = await this.connection.getProgramAccounts(
         WRAPPER_PROGRAM_ID,
         {
           commitment: 'confirmed',
+          filters: [
+            {
+              memcmp: {
+                offset: 0,
+                bytes: wrapperDiscriminant.toString('base64'),
+                encoding: 'base64',
+              },
+            },
+          ],
         },
       );
 
