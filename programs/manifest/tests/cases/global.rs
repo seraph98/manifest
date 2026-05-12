@@ -1641,7 +1641,7 @@ async fn global_create_with_dusted_address() -> anyhow::Result<()> {
     let (global_key, _global_bump) = get_global_address(&mint_fixture.key);
 
     // Get payer's initial balance
-    let payer_initial_balance: u64 = test_fixture
+    let _payer_initial_balance: u64 = test_fixture
         .context
         .borrow_mut()
         .banks_client
@@ -1869,7 +1869,7 @@ async fn global_match_multiple_levels_with_unbacked() -> anyhow::Result<()> {
 /// before creating the token account. Tests both regular SPL token and Token-2022.
 #[tokio::test]
 async fn global_create_with_dusted_vault_address() -> anyhow::Result<()> {
-    use manifest::validation::{get_global_address, get_global_vault_address};
+    use manifest::validation::get_global_vault_address;
     use solana_sdk::system_instruction::transfer;
 
     let test_fixture: TestFixture = TestFixture::new().await;
