@@ -672,7 +672,7 @@ mod test {
 
     #[test]
     fn test_display_trader() {
-        let _ = format!("{}", GlobalTrader::default());
+        format!("{}", GlobalTrader::default());
     }
 
     #[test]
@@ -686,7 +686,7 @@ mod test {
 
     #[test]
     fn test_display_deposit() {
-        let _ = format!("{}", GlobalDeposit::default());
+        format!("{}", GlobalDeposit::default());
     }
 
     #[test]

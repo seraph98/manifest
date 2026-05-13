@@ -7,9 +7,6 @@ authors = ["Britt Cyr <britt@manifest.trade>"]
 description = "Onchain orderbook optimized for space and accounts"
 license-file = "LICENSE"
 
-[lints]
-workspace = true
-
 [lib]
 crate-type = ["cdylib", "lib"]
 name = "manifest"

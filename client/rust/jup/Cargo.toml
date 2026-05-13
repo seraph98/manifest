@@ -7,9 +7,6 @@ authors = ["Britt Cyr <britt@manifest.trade>"]
 description = "Jupiter AMM interface for Manifest exchange"
 license-file = "LICENSE"
 
-[lints]
-workspace = true
-
 [features]
 test = []
 

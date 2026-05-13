@@ -158,7 +158,7 @@ fn test_display() {
         false,
         OrderType::Limit,
     );
-    let _ = format!("{}", open_order);
+    format!("{}", open_order);
 }
 
 #[test]

@@ -7,9 +7,6 @@ authors = ["Britt Cyr <britt@cks.systems>"]
 description = "Wrapper for Manifest"
 license-file = "LICENSE"
 
-[lints]
-workspace = true
-
 [lib]
 crate-type = ["cdylib", "lib"]
 name = "wrapper"

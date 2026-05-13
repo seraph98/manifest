@@ -306,7 +306,7 @@ mod test {
             OrderType::Limit,
         )
         .unwrap();
-        let _ = format!("{}", resting_order);
+        format!("{}", resting_order);
     }
 
     #[test]

@@ -7,9 +7,6 @@ authors = ["Maximilian Schneider <max@mango.markets>"]
 description = "UI Wrapper for Manifest"
 license-file = "LICENSE"
 
-[lints]
-workspace = true
-
 [lib]
 crate-type = ["cdylib", "lib"]
 name = "ui_wrapper"
