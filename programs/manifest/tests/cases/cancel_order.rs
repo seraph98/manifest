@@ -5,8 +5,11 @@ use manifest::{
     program::{batch_update::CancelOrderParams, batch_update_instruction},
     state::{OrderType, MARKET_BLOCK_SIZE},
 };
+use solana_instruction::Instruction;
+use solana_keypair::Keypair;
+use solana_program::pubkey::Pubkey;
 use solana_program_test::tokio;
-use solana_sdk::{instruction::Instruction, pubkey::Pubkey, signature::Keypair, signer::Signer};
+use solana_signer::Signer;
 
 use crate::{send_tx_with_retry, Side, TestFixture, Token, SOL_UNIT_SIZE, USDC_UNIT_SIZE};
 

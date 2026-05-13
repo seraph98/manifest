@@ -12,12 +12,12 @@ use manifest::{
     state::{constants::NO_EXPIRATION_LAST_VALID_SLOT, OrderType, RestingOrder},
     validation::get_vault_address,
 };
+use solana_instruction::Instruction;
+use solana_keypair::Keypair;
+use solana_program::instruction::AccountMeta;
 use solana_program_test::{tokio, ProgramTestContext};
-use solana_sdk::{
-    instruction::{AccountMeta, Instruction},
-    signature::{Keypair, Signer},
-    transaction::Transaction,
-};
+use solana_signer::Signer;
+use solana_transaction::Transaction;
 
 use crate::{
     send_tx_with_retry, Side, TestFixture, Token, TokenAccountFixture, SOL_UNIT_SIZE,
