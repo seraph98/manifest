@@ -36,6 +36,7 @@ const ORIGINATING_PROTOCOL_IDS = {
   '8psNvWTrdNTiVRNzAgsou9kETXNJm2SXZyaKuJraVRtf': 'phantom',
   B3111yJCeHBcA1bizdJjUFPALfhAfSRnAbJzGUtnt56A: 'binance',
   '7JCe3GHwkEr3feHgtLXnmuJ1yB3A7coSeyynxTBgdG8k': 'coinbase',
+  F7p3dFrjRTbtRp8FRF6qHLomXbKRBzpvBLjtQcfcgmNe: 'relay',
 } as const;
 
 function detectAggregatorFromKeys(accountKeys: string[]): string | undefined {
